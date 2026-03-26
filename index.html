@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mon Terminal</title>
+</head>
+<body style="background:black;color:lime;font-family:monospace">
+
+<h2>Terminal Hacker</h2>
+
+<div id="output"></div>
+<input id="cmd" placeholder="commande..." onkeydown="run(event)">
+
+<script>
+function print(text){
+    document.getElementById("output").innerHTML += text + "<br>";
+}
+
+async function run(e){
+    if(e.key === "Enter"){
+        let cmd = document.getElementById("cmd").value;
+        print("> " + cmd);
+
+        if(cmd.startsWith("ai ")){
+            let msg = cmd.replace("ai ","");
+
+            let res = await fetch("https://hacker-pro-ihf9.onrender.com", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({message: msg})
+            });
+
+            let data = await res.json();
+            print("IA: " + data.response);
+        }
+
+        document.getElementById("cmd").value = "";
+    }
+}
+</script>
+
+</body>
+</html>
